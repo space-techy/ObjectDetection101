@@ -4,6 +4,7 @@ from kivy.uix.behaviors.hover_behavior import HoverBehavior
 from kivy.uix.image import Image
 from kivy.uix.label import Label
 from kivy.uix.gridlayout import GridLayout
+from kivy.graphics import Color, Rectangle
 
 class HoverBox(RelativeLayout, HoverBehavior):
     def __init__(self, **kwargs):
@@ -11,13 +12,13 @@ class HoverBox(RelativeLayout, HoverBehavior):
         self.expanded = False
 
         # Small box
-        self.small_box = Label(text='Hover me', size_hint=(None, None), size=(100, 100))
+        self.small_box = Label(text='Hover me', size_hint=(None, None), size=(100, 100),color="black")
         self.add_widget(self.small_box)
 
         # Grid layout for expanded view
         self.grid_layout = GridLayout(cols=2)
         self.image = Image(source='./image.png')
-        self.info_label = Label(text='This is some information about the image.')
+        self.info_label = Label(text='This is some information about the image.',color="black")
         self.grid_layout.add_widget(self.image)
         self.grid_layout.add_widget(self.info_label)
 
@@ -35,9 +36,25 @@ class HoverBox(RelativeLayout, HoverBehavior):
 
 class HoverBoxApp(App):
     def build(self):
+        # Create a RelativeLayout for the background
         root = RelativeLayout()
+
+        # Set the background color to white
+        with root.canvas.before:
+            Color(1, 1, 1, 1)  # Set the color to white
+            self.rect = Rectangle(size=root.size, pos=root.pos)
+
+        # Bind the size and position of the rectangle to the root layout
+        def update_rect(instance, value):
+            self.rect.pos = instance.pos
+            self.rect.size = instance.size
+
+        root.bind(pos=update_rect, size=update_rect)
+
+        # Add the HoverBox widget to the root layout
         hover_box = HoverBox()
         root.add_widget(hover_box)
+
         return root
 
 if __name__ == '__main__':
