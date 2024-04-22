@@ -55,6 +55,8 @@ class HoverBoxApp(App):
         hover_box = HoverBox()
         root.add_widget(hover_box)
 
+        
+
         return root
 
 if __name__ == '__main__':
